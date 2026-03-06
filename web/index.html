@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Banka Risk Analizi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏦</div>
+    <div class="logo-text">Bank<span>Risk</span></div>
+  </div>
+  <div class="header-meta">
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      API AKTİF
+    </div>
+    <div class="api-badge">v1.0.0 · XGBoost</div>
+  </div>
+</header>
+
+<div class="hero fade-up">
+  <div class="hero-tag">⚡ Makine Öğrenmesi Projesi</div>
+  <h1>Müşteri <span class="hi">Risk</span><br/>Analiz <span class="hii">Motoru</span></h1>
+  <p class="hero-sub">Gecikme ve temerrüt ihtimalini XGBoost tabanlı pipeline ile gerçek zamanlı tahmin edin.</p>
+</div>
+
+<div class="container">
+  <div class="layout">
+
+    <div class="card fade-up delay-2">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-title-icon">📋</div>
+          MÜŞTERİ BİLGİLERİ
+        </div>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">POST /tahmin-et</span>
+      </div>
+      <div class="card-body">
+
+        <div class="section-label">DEMOGRAFİK</div>
+        <div class="fields-grid three">
+          <div class="field">
+            <label>YAŞ</label>
+            <input type="number" id="Yas" min="18" max="100" placeholder="35"/>
+          </div>
+          <div class="field">
+            <label>CİNSİYET</label>
+            <select id="Cinsiyet">
+              <option value="">Seçin</option>
+              <option value="E">Erkek</option>
+              <option value="K">Kadın</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>EĞİTİM DURUMU</label>
+            <select id="Egitim_Durumu">
+              <option value="">Seçin</option>
+              <option value="Lise">Lise</option>
+              <option value="Lisans">Lisans</option>
+              <option value="Lisansustu">Lisansüstü</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-label">KONUM & KATEGORİ</div>
+        <div class="fields-grid">
+          <div class="field">
+            <label>ŞEHİR</label>
+            <input type="text" id="Sehir" placeholder="İstanbul"/>
+          </div>
+          <div class="field">
+            <label>ŞEHİR TİPİ</label>
+            <select id="Sehir_Tipi">
+              <option value="">Seçin</option>
+              <optgroup label="— Büyükşehir">
+                <option value="Finans &amp; Ticaret">Finans &amp; Ticaret</option>
+                <option value="Büyükşehir &amp; Sanayi">Büyükşehir &amp; Sanayi</option>
+                <option value="Büyükşehir &amp; Liman">Büyükşehir &amp; Liman</option>
+                <option value="Başkent &amp; Hizmet">Başkent &amp; Hizmet</option>
+              </optgroup>
+              <optgroup label="— Sanayi">
+                <option value="Ağır Sanayi">Ağır Sanayi</option>
+                <option value="Sanayi &amp; Tarım">Sanayi &amp; Tarım</option>
+                <option value="Hizmet &amp; Sınır Ticareti">Hizmet &amp; Sınır Ticareti</option>
+              </optgroup>
+              <optgroup label="— Tarım / Turizm">
+                <option value="Tarım">Tarım</option>
+                <option value="Tarım &amp; Orman">Tarım &amp; Orman</option>
+                <option value="Tarım &amp; Sanayi">Tarım &amp; Sanayi</option>
+                <option value="Tarım &amp; Turizm">Tarım &amp; Turizm</option>
+                <option value="Turizm &amp; Tarım">Turizm &amp; Tarım</option>
+                <option value="Liman &amp; Tarım">Liman &amp; Tarım</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field">
+            <label>EKONOMİK BÖLGE SEVİYESİ</label>
+            <input type="number" id="Ekonomik_Bolge_Seviyesi" min="1" max="5" step="0.1" placeholder="3.5"/>
+          </div>
+          <div class="field">
+            <label>MESLEK</label>
+            <select id="Meslek">
+              <option value="">Seçin</option>
+              <option value="Freelancer_Digital">Freelancer / Dijital</option>
+              <option value="Ciftci">Çiftçi</option>
+              <option value="Emekli">Emekli</option>
+              <option value="Ev_Hanimi">Ev Hanımı</option>
+              <option value="Issiz_Sosyal_Yardim">İşsiz / Sosyal Yardım</option>
+              <option value="Beyaz_Yaka_Uzman">Beyaz Yaka Uzman</option>
+              <option value="Mavi_Yaka_Isci">Mavi Yaka İşçi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-label">FİNANSAL PROFİL</div>
+        <div class="fields-grid">
+          <div class="field">
+            <label>GELİR TİPİ</label>
+            <select id="Gelir_Tipi">
+              <option value="">Seçin</option>
+              <option value="Serbest">Serbest Meslek</option>
+              <option value="Ticari">Ticari Gelir</option>
+              <option value="Maasli">Maaşlı</option>
+              <option value="Pasif_Gelir">Pasif Gelir</option>
+              <option value="Sosyal_Yardim">Sosyal Yardım</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>KART TİPİ</label>
+            <select id="Kart_Tipi">
+              <option value="">Seçin</option>
+              <option value="Standard_Debit">Standart</option>
+              <option value="Ciftci_Karti">Gold</option>
+              <option value="Emekli_Karti">Premium</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>KREDİ LİMİTİ (TL)</label>
+            <input type="number" id="Kredi_Karti_Limiti_TL" placeholder="25000"/>
+          </div>
+          <div class="field">
+            <label>TOPLAM BORÇ (TL)</label>
+            <input type="number" id="Toplam_Borc_TL" placeholder="8500"/>
+          </div>
+        </div>
+
+        <div class="section-label">ÖDEME DAVRANIŞI</div>
+        <div class="fields-grid three">
+          <div class="field">
+            <label>LİMİT KULLANIM ORANI</label>
+            <input type="number" id="Limit_Kullanim_Orani" min="0" max="1" step="0.01" placeholder="0.34"/>
+          </div>
+          <div class="field">
+            <label>SON AY ÖDENEİ (TL)</label>
+            <input type="number" id="Son_Ay_Odenen_TL" placeholder="2200"/>
+          </div>
+          <div class="field">
+            <label>AYLIK ÖDEME %</label>
+            <input type="number" id="Aylik_Odeme_Yuzdesi" min="0" max="100" step="0.1" placeholder="45.5"/>
+          </div>
+        </div>
+        <div class="fields-grid">
+          <div class="field">
+            <label>ASGARİ ÖDEME ZORUNLULUĞU</label>
+            <input type="number" id="Asgari_Odeme_Zorunlulugu" placeholder="500"/>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+          <span id="btnText">🔍 RİSK ANALİZİ BAŞLAT</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <div class="result-panel">
+
+      <div class="result-card fade-up delay-3" id="resultCard">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon">📊</div>
+            TAHMİN SONUCU
+          </div>
+        </div>
+        <div class="result-main">
+          <div class="result-icon" id="resultIcon">🤖</div>
+          <div class="result-code" id="resultCode">—</div>
+          <div class="result-label" id="resultLabel">Analiz Bekleniyor</div>
+          <div class="result-desc" id="resultDesc">Formu doldurup analiz başlatın.</div>
+
+          <div class="prob-bar-wrap" id="probBarWrap" style="display:none;width:100%;max-width:260px;margin-top:8px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">RİSK OLASILIGI</span>
+              <span style="font-family:var(--font-mono);font-size:10px;" id="probText">—</span>
+            </div>
+            <div style="background:var(--border);border-radius:999px;height:8px;overflow:hidden;">
+              <div id="probBar" style="height:100%;width:0%;border-radius:999px;transition:width 0.8s cubic-bezier(0.34,1.56,0.64,1);background:var(--muted);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">0%</span>
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)" id="riskLevel">—</span>
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">100%</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-footer">
+          <span class="result-tag">TAHMİN KODU</span>
+          <span class="result-code-tag" id="resultFooter">PENDING</span>
+        </div>
+      </div>
+
+      <div class="info-tabs-card fade-up delay-3">
+        <div class="tabs-header">
+          <button class="tab-btn active" onclick="switchTab('api')">API</button>
+          <button class="tab-btn" onclick="switchTab('model')">Model</button>
+          <button class="tab-btn" onclick="switchTab('veri')">Veri</button>
+          <button class="tab-btn" onclick="switchTab('test')">Test</button>
+        </div>
+
+        <div class="tab-pane active" id="tab-api">
+          <div class="tab-section-title">Endpoint Bilgileri</div>
+          <div class="info-row">
+            <span class="info-row-key">Method</span>
+            <span class="info-row-val tab-accent">POST</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-key">URL</span>
+            <span class="info-row-val tab-mono">/tahmin-et</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-key">Host</span>
+            <span class="info-row-val tab-mono">localhost:8000</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-key">Framework</span>
+            <span class="info-row-val">FastAPI</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-key">Content-Type</span>
+            <span class="info-row-val tab-mono">application/json</span>
+          </div>
+          <div class="tab-section-title" style="margin-top:16px">Yanıt Formatı</div>
+          <div class="tab-code-block">
+{<br/>
+&nbsp;&nbsp;"durum": "Başarılı",<br/>
+&nbsp;&nbsp;"tahmin_kodu": 0 | 1,<br/>
+&nbsp;&nbsp;"karar": "..."<br/>
+}
+          </div>
+        </div>
+
+        <div class="tab-pane" id="tab-model">
+          <div class="tab-section-title">Pipeline Adımları</div>
+          <div class="pipeline-step">
+            <div class="pipeline-num">1</div>
+            <div>
+              <div class="pipeline-name">Ön İşleme</div>
+              <div class="pipeline-desc">StandardScaler · OrdinalEncoder · OneHotEncoder · TargetEncoder</div>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <div class="pipeline-num" style="background:rgba(0,212,255,0.15);color:var(--accent)">2</div>
+            <div>
+              <div class="pipeline-name">Dengeleme</div>
+              <div class="pipeline-desc">SMOTE — Sentetik azınlık örnekleri oluşturarak sınıf dengesizliğini giderir</div>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <div class="pipeline-num" style="background:rgba(240,180,41,0.15);color:var(--gold)">3</div>
+            <div>
+              <div class="pipeline-name">XGBoost Sınıflandırıcı</div>
+              <div class="pipeline-desc">RandomizedSearchCV ile F1 skoruna göre optimize edilmiş en iyi model</div>
+            </div>
+          </div>
+          <div class="tab-section-title" style="margin-top:16px">Hiperparametreler</div>
+          <div class="info-row"><span class="info-row-key">n_estimators</span><span class="info-row-val tab-mono">100–300</span></div>
+          <div class="info-row"><span class="info-row-key">learning_rate</span><span class="info-row-val tab-mono">0.01–0.2</span></div>
+          <div class="info-row"><span class="info-row-key">max_depth</span><span class="info-row-val tab-mono">3–9</span></div>
+          <div class="info-row"><span class="info-row-key">cv folds</span><span class="info-row-val tab-mono">3</span></div>
+        </div>
+
+        <div class="tab-pane" id="tab-veri">
+          <div class="tab-section-title">Veri Seti</div>
+          <div class="info-row"><span class="info-row-key">Toplam Kayıt</span><span class="info-row-val tab-accent">100.000</span></div>
+          <div class="info-row"><span class="info-row-key">Özellik Sayısı</span><span class="info-row-val">15</span></div>
+          <div class="info-row"><span class="info-row-key">Hedef Değişken</span><span class="info-row-val tab-mono">Risk (0/1)</span></div>
+          <div class="info-row"><span class="info-row-key">Risksiz (0)</span><span class="info-row-val" style="color:var(--safe)">94.498 (%94.5)</span></div>
+          <div class="info-row"><span class="info-row-key">Riskli (1)</span><span class="info-row-val" style="color:var(--risk)">5.488 (%5.5)</span></div>
+          <div class="tab-section-title" style="margin-top:16px">Özellik Tipleri</div>
+          <div class="info-row"><span class="info-row-key">Sayısal</span><span class="info-row-val">Yaş, Limit, Borç, Skor…</span></div>
+          <div class="info-row"><span class="info-row-key">Kategorik (OHE)</span><span class="info-row-val">Cinsiyet, Meslek, Kart…</span></div>
+          <div class="info-row"><span class="info-row-key">Sıralı (Ordinal)</span><span class="info-row-val">Eğitim Durumu</span></div>
+          <div class="info-row"><span class="info-row-key">Target Enc.</span><span class="info-row-val">Şehir</span></div>
+          <div class="tab-section-title" style="margin-top:16px">Risk Tanımı</div>
+          <div class="tab-desc-block">Gecikme Gün Sayısı &gt; 0 olan müşteriler riskli (1) olarak etiketlenmiştir. Bu sütun modele dahil edilmemiştir.</div>
+        </div>
+
+        <!-- Test Tab -->
+        <div class="tab-pane" id="tab-test">
+          <div class="tab-section-title">Hızlı Test Senaryoları</div>
+          <div class="test-scenario risk-scenario" onclick="fillDemo('risk')">
+            <div class="scenario-header">
+              <span class="scenario-dot risk-dot"></span>
+              <span class="scenario-title">Riskli Profil</span>
+              <span class="scenario-arrow">→</span>
+            </div>
+            <div class="scenario-detail">İşsiz · Van · Sosyal Yardım · Limit %96.7 dolu</div>
+          </div>
+          <div class="test-scenario safe-scenario" onclick="fillDemo('safe')">
+            <div class="scenario-header">
+              <span class="scenario-dot safe-dot"></span>
+              <span class="scenario-title">Risksiz Profil</span>
+              <span class="scenario-arrow">→</span>
+            </div>
+            <div class="scenario-detail">Beyaz Yaka · İstanbul · Maaşlı · Limit %3.1 dolu</div>
+          </div>
+          <div class="tab-section-title" style="margin-top:16px">Dikkat Edilecekler</div>
+          <div class="tab-desc-block">
+            Limit kullanım oranı yüksek, müşteri skoru düşük ve sosyal yardım gelirli profiller genellikle riskli sınıfa girer. Şehir bilgisi TargetEncoder ile kodlandığı için bilinmeyen şehirler ortalama değer alır.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 BankRisk · Banka Risk Analizi </p>
+  <div class="footer-tags">
+    <span class="tag">Python</span>
+    <span class="tag">FastAPI</span>
+    <span class="tag">XGBoost</span>
+    <span class="tag">SMOTE</span>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
